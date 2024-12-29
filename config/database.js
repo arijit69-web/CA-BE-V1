@@ -6,7 +6,7 @@ let client;
 const connect = async () => {
     try {
        
-        const uri =  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@job-portal-demo.tgr6x.mongodb.net/jobPortalTest?retryWrites=true&w=majority&appName=job-portal-demo`;
+        const uri =  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@job-portal-demo.tgr6x.mongodb.net/jobPortal?retryWrites=true&w=majority&appName=job-portal-demo`;
         client = new MongoClient(uri, {
             serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true },
         });
@@ -23,6 +23,6 @@ const getDb = () => {
     if (!client) {
         throw new Error("Database connection not established");
     }
-    return client.db("jobPortalTest");
+    return client.db("jobPortal");
 };
 module.exports = { connect, getDb };
