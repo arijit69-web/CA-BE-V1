@@ -23,6 +23,6 @@ const getDb = () => {
     if (!client) {
         throw new Error("Database connection not established");
     }
-    return client.db("jobPortalTest");
+    return client.db("jobPortalV1");
 };
 module.exports = { connect, getDb };

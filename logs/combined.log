@@ -5,3 +5,7 @@
 {"code":"ENOTFOUND","hostname":"_mongodb._tcp.job-portal-demo.mongodb.net","level":"error","message":"Error connecting to MongoDB: querySrv ENOTFOUND _mongodb._tcp.job-portal-demo.mongodb.net","stack":"Error: querySrv ENOTFOUND _mongodb._tcp.job-portal-demo.mongodb.net\n    at QueryReqWrap.onresolve [as oncomplete] (node:internal/dns/promises:252:17)","syscall":"querySrv","timestamp":"2024-12-25T06:05:56.690Z"}
 {"level":"info","message":"Server running on port 3000","timestamp":"2024-12-25T06:08:03.273Z"}
 {"level":"info","message":"Successfully connected to MongoDB","timestamp":"2024-12-25T06:08:04.209Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2025-01-04T13:59:44.841Z"}
+{"level":"info","message":"Successfully connected to MongoDB","timestamp":"2025-01-04T13:59:46.080Z"}
+{"level":"info","message":"Server running on port 3000","timestamp":"2025-01-04T14:03:38.799Z"}
+{"level":"info","message":"Successfully connected to MongoDB","timestamp":"2025-01-04T14:03:39.601Z"}
