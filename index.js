@@ -5,6 +5,7 @@ const logger = require("./config/logger");
 const database = require("./config/database");
 const jobRoutes = require("./routes/jobRoutes");
 const errorHandler = require("./middleware/errorHandler");
+const userRoutes = require("./routes/User");
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,7 @@ app.use(cors());
 
 // Routes
 app.use("/api/v1/jobs", jobRoutes);
+app.use("/api/v1/auth", userRoutes);
 
 // Health Check
 app.get("/", (req, res) => {
