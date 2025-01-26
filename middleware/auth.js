@@ -14,9 +14,9 @@ exports.auth = async (req, res, next) => {
                 message: 'Authorization header is missing',
             });
         }
-        
+
         const token = authHeader.replace("Bearer ", "");
-        
+
         if (token === undefined) {
             return res.status(401).json({
                 success: false,
@@ -37,7 +37,6 @@ exports.auth = async (req, res, next) => {
         next();
     }
     catch (error) {
-        console.log(error)
         return res.status(401).json({
             success: false,
             message: 'Something went Wrong while Validating the Token',

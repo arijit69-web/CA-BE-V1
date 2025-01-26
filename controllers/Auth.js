@@ -3,22 +3,21 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const Profile = require("../models/Profile");
 require("dotenv").config();
+const { oauth2Client } = require('../utils/googleClient');
+const axios = require('axios');
 
 
 exports.signup = async (req, res) => {
     try {
         const {
-            firstName,
-            lastName,
+            name,
             email,
             password,
             confirmPassword,
             accountType,
-            contactNumber
         } = req.body;
         if (
-            !firstName ||
-            !lastName ||
+            !name ||
             !email ||
             !password ||
             !confirmPassword
@@ -55,10 +54,8 @@ exports.signup = async (req, res) => {
             contactNumber: null,
         });
         const user = await User.create({
-            firstName,
-            lastName,
+            name,
             email,
-            contactNumber,
             password: hashedPassword,
             accountType: accountType,
             additionalDetails: profileDetails._id,
@@ -131,7 +128,6 @@ exports.login = async (req, res) => {
             });
         }
     } catch (error) {
-        console.log(error)
         return res.status(500).json({
             success: false,
             message: `Login Failure Please Try Again`,
@@ -139,4 +135,55 @@ exports.login = async (req, res) => {
     }
 };
 
+exports.googleAuth = async (req, res, next) => {
+    const code = req.body.token;
+    try {
+        const googleRes = await oauth2Client.getToken(code);
+        oauth2Client.setCredentials(googleRes.tokens);
+        const userRes = await axios.get(
+            `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
+        );
+        const { email, name, picture } = userRes.data;
+        let user = await User.findOne({ email });
 
+        if (!user) {
+            const profileDetails = await Profile.create({
+                gender: null,
+                dateOfBirth: null,
+                about: null,
+                contactNumber: null,
+            });
+            user = await User.create({
+                name,
+                email,
+                accountType: "Student",
+                additionalDetails: profileDetails._id,              
+                image: picture,
+            });
+        }
+        const { _id } = user;
+      
+        const token = jwt.sign(
+            { email: user.email, id: user._id, accountType: user.accountType },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: "24h",
+            }
+        );
+        const options = {
+            expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+            httpOnly: true,
+        };
+        res.cookie("token", token, options).status(200).json({
+            success: true,
+            token,
+            user,
+            message: `User Loggedin Successfully`,
+        });
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: `Login Failure Please Try Again`,
+        });
+    }
+};
